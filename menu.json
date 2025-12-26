@@ -1,0 +1,26 @@
+{
+  "Pizza": [
+    { "name": "Margherita Pizza", "price": 450 },
+    { "name": "Veg Pizza", "price": 500 }
+  ],
+  "Bakery Items": [
+    { "name": "Garlic Bread", "price": 220 },
+    { "name": "Chocolate Croissant", "price": 180 }
+  ],
+  "Chowmein": [
+    { "name": "Veg Chowmein", "price": 250 },
+    { "name": "Chicken Chowmein", "price": 300 }
+  ],
+  "Tea": [
+    { "name": "Milk Tea", "price": 50 },
+    { "name": "Green Tea", "price": 80 }
+  ],
+  "Snacks": [
+    { "name": "French Fries", "price": 180 },
+    { "name": "Chicken Nuggets", "price": 250 }
+  ],
+  "Momo": [
+    { "name": "Veg Momo", "price": 200 },
+    { "name": "Chicken Momo", "price": 260 }
+  ]
+}
