@@ -1,26 +1,43 @@
 {
   "Pizza": [
-    { "name": "Margherita Pizza", "price": 450 },
-    { "name": "Veg Pizza", "price": 500 }
+    { "name": "Smoked Chicken Pizza", "price": 800 },
+    { "name": "Veg Pizza", "price": 750 },
+    { "name": "Cheese Pizza", "price": 750 }
   ],
   "Bakery Items": [
-    { "name": "Garlic Bread", "price": 220 },
-    { "name": "Chocolate Croissant", "price": 180 }
+    { "name": "Donut", "price": 25 },
+    { "name": "Croissant", "price": 35 },
+    { "name": "Danish", "price": 30}
   ],
   "Chowmein": [
-    { "name": "Veg Chowmein", "price": 250 },
-    { "name": "Chicken Chowmein", "price": 300 }
+    { "name": "Veg Chowmein", "price": 120 },
+    { "name": "Chicken Chowmein", "price": 150 }
+  ],
+  "Thukpa": [
+    { "name": "Veg Thukpa", "price": 150 },
+    { "name": "Chicken Thukpa", "price": 180 }
   ],
   "Tea": [
-    { "name": "Milk Tea", "price": 50 },
-    { "name": "Green Tea", "price": 80 }
+    { "name": "Milk Tea", "price": 25 },
+    { "name": "Masala Milk Tea", "price": 30 },
+    { "name": "Black Tea", "price": 20 },
+    { "name": "Lemon Tea", "price": 25 },
+    { "name": "Hot Lemon", "price": 30 },
+    { "name": "Hot Lemon w/ Honey", "price": 50 },
+    { "name": "Chamomile Tea", "price": 50 },
+    { "name": "Fruit Tea", "price": 50 }
   ],
   "Snacks": [
-    { "name": "French Fries", "price": 180 },
-    { "name": "Chicken Nuggets", "price": 250 }
+    { "name": "French Fries", "price": 120 },
+    { "name": "Mustang Aalu", "price": 150 },
+    { "name": "Chicken Chilly", "price": 150 },
+    { "name": "Nachos", "price": 150 },
+    { "name": "Green Tea", "price": 80 }
   ],
   "Momo": [
-    { "name": "Veg Momo", "price": 200 },
-    { "name": "Chicken Momo", "price": 260 }
+    { "name": "Buff Momo", "price": 150 },
+    { "name": "Chicken Momo", "price": 180 },
+    { "name": "Jhol Buff Momo", "price": 180 },
+    { "name": "Jhol Chicken Momo", "price": 210 }
   ]
 }
