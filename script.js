@@ -11,8 +11,35 @@ fetch("menu.json")
       title.textContent = category.toUpperCase();
       categoryDiv.appendChild(title);
 
-      data[category].forEach(item => {
-        const itemDiv = document.createElement("div");
+      if (Array.isArray(data[category])){
+        data[category].forEach(item => {
+          categoryDiv.appendChild(createMenuItem(item));
+        });
+      }
+      else {
+        const subCategories = data[category];
+
+        for (const sub in subCategories) {
+          const subTitle = document.createElement("h3");
+          subTitle.className = "subcategory";
+          subTitle.textContent = sub.toUpperCase();
+          categoryDiv.appendChild(subTitle);
+
+          subCategories[sub].forEach(item => {
+            categoryDiv.appendChild(createMenuItem(item));
+          });
+        }
+      }
+
+      menuContainer.appendChild(categoryDiv);
+    }
+  })
+  .catch(error => {
+    console.error("Error loading menu:", error);
+  });
+
+function createMenuItem(item){
+  const itemDiv = document.createElement("div");
         itemDiv.className = "menu-item";
 
         const name = document.createElement("span");
@@ -25,12 +52,5 @@ fetch("menu.json")
 
         itemDiv.appendChild(name);
         itemDiv.appendChild(price);
-        categoryDiv.appendChild(itemDiv);
-      });
-
-      menuContainer.appendChild(categoryDiv);
-    }
-  })
-  .catch(error => {
-    console.error("Error loading menu:", error);
-  });
+        return itemDiv;
+}
