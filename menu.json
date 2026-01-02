@@ -6,8 +6,8 @@
   ],
   "Bakery Items": [
     { "name": "Donut", "price": 25 },
-    //{ "name": "Croissant", "price": 35 },
-    //{ "name": "Danish", "price": 30}
+    { "name": "Croissant", "price": 35 },
+    { "name": "Danish", "price": 30}
   ],
   "Chowmein": [
     { "name": "Veg Chowmein", "price": 120 },
@@ -30,24 +30,30 @@
     { "name": "Fruit Tea", "price": 50 }
   ],
   "Snacks": [
-<<<<<<< HEAD
-    { "name": "French Fries", "price": 120 },
-    { "name": "Mustang Aalu", "price": 180 },
-    { "name": "Chicken Chilly", "price": 280 },
-=======
     { "name": "French Fries", "price": 150 },
     { "name": "Mustang Aalu", "price": 180 },
     { "name": "Chicken Chilly", "price": 280 },
     { "name": "Chicken Chhoila", "price": 280 },
->>>>>>> e2b8d642724f1ada8f6cb728d1f27895b794605a
+    { "name": "Mushroom Chhoila", "price": 200 },
+    { "name": "Mushroom Chilly", "price": 200 },
     { "name": "Nachos", "price": 150 },
-<<<<<<< HEAD
-    { "name": "Pop corn", "price": 50 },
-    { "name": "Chicken Chhoila", "price": 280}
-=======
     { "name": "Chips Chilly", "price": 180 },
     { "name": "Pop Corn", "price": 80 }
->>>>>>> e2b8d642724f1ada8f6cb728d1f27895b794605a
-  ]
-
+  ],
+  "Momo": {
+    "Buff": [
+      { "name": "Steam Buff Momo", "price": 150 },
+      { "name": "Jhol Buff Momo", "price": 180 },
+      { "name": "Chhoila Buff Momo", "price": 190 },
+      { "name": "Fried Buff Momo", "price": 170 },
+      { "name": "Buff Chilly Momo", "price": 190 }
+    ],
+    "Chicken": [
+      { "name": "Steam Chicken Momo", "price": 180 },
+      { "name": "Jhol Chicken Momo", "price": 210 },
+      { "name": "Chhoila Chicken Momo", "price": 220 },
+      { "name": "Fried Chicken Momo", "price": 200 },
+      { "name": "Chicken Chilly Momo", "price": 220 }
+    ]
+  }
 }
