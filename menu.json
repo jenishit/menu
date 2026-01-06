@@ -2,7 +2,11 @@
   "Pizza": [
     { "name": "Smoked Chicken Pizza", "price": 800 },
     { "name": "Veg Pizza", "price": 500 },
-    { "name": "Cheese Pizza", "price": 500 }
+    { "name": "Meat Lover Pizza", "price": 800 },
+    { "name": "Cheese Pizza", "price": 500 },
+    { "name": "Supreme Pizza", "price": 900 },
+    { "name": "Pepperoni Chicken Pizza", "price": 700 },
+    { "name": "Pepperoni Bacon Pizza", "price": 700 }
   ],
   "Bakery Items": [
     { "name": "Donut", "price": 25 },
@@ -38,7 +42,11 @@
     { "name": "Mushroom Chilly", "price": 200 },
     { "name": "Nachos", "price": 150 },
     { "name": "Chips Chilly", "price": 180 },
-    { "name": "Pop Corn", "price": 80 }
+    { "name": "Pop Corn", "price": 80 },
+    { "name": "Chowchow sadheko", "price": 100 },
+    { "name": "Smoked Chicken Chilly", "price": 380 },
+    { "name": "Peanuts Sadheko", "price": 100 },
+    { "name": "Sausage", "price": 250 }
   ],
   "Momo": {
     "Buff": [
