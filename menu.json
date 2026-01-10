@@ -46,7 +46,8 @@
     { "name": "Chowchow sadheko", "price": 100 },
     { "name": "Smoked Chicken Chilly", "price": 380 },
     { "name": "Peanuts Sadheko", "price": 100 },
-    { "name": "Sausage", "price": 250 }
+    { "name": "Sausage", "price": 250 },
+    { "name": "Spicy Chicken Wings", "price": 350}
   ],
   "Momo": {
     "Buff": [
