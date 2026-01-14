@@ -1,6 +1,6 @@
 {
   "Pizza": [
-    { "name": "Smoked Chicken Pizza", "price": 800 },
+    { "name": "Smoked Chicken Pizza", "price": 700 },
     { "name": "Veg Pizza", "price": 500 },
     { "name": "Meat Lover Pizza", "price": 800 },
     { "name": "Cheese Pizza", "price": 500 },
@@ -52,7 +52,7 @@
     { "name": "Smoked Chicken Chilly", "price": 380 },
     { "name": "Peanuts Sadheko", "price": 100 },
     { "name": "Sausage", "price": 250 },
-    { "name": "Spicy Chicken Wings", "price": 350}
+    { "name": "Spicy Chicken Wings", "price": 250}
   ],
   "Momo": {
     "Buff": [
