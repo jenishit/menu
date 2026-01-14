@@ -1,32 +1,56 @@
 {
-  "Pizza": [
+  "Fire Wood Pizza": [
+    { "name": "Margherita Pizza", "price": 460 },
+    { "name": "Grilled Mushroom Pizza", "price": 550 },
+    { "name": "Paneer Pizza", "price": 590 },
+    { "name": "Veg Paradise Pizza", "price": 630 },
+    { "name": "Chicken Chhoila Pizza", "price": 660 },
+    { "name": "Chicken Sausage Pizza", "price": 690},
     { "name": "Smoked Chicken Pizza", "price": 700 },
-    { "name": "Veg Pizza", "price": 500 },
-    { "name": "Meat Lover Pizza", "price": 800 },
-    { "name": "Cheese Pizza", "price": 500 },
-    { "name": "Supreme Pizza", "price": 900 },
+    { "name": "Smoked Chicken Hawaiian Pizza", "price": 750 },
     { "name": "Pepperoni Chicken Pizza", "price": 750 },
+    { "name": "Half Veg/Half Non-Veg Pizza", "price": "650/850" },
+    { "name": "Ham Hawaiian Pizza", "price": 700 },
     { "name": "Pepperoni Bacon Pizza", "price": 750 },
-    { "name": "Veg Paradise Pizza", "price": 650 }
+    { "name": "Bacon Pizza", "price": 780},
+    { "name": "Meat Lover Pizza", "price": 800 },
+    { "name": "Aago Aroma Supreme Pizza", "price": 900 }
   ],
-  "Bakery Items": [
-    { "name": "Donut", "price": 25 },
-    { "name": "Croissant", "price": 35 },
-    { "name": "Danish", "price": 30}
+  "Extra Toppings":[
+    { "name": "Onion", "price": 20},
+    { "name": "Capsicum", "price": 30},
+    { "name": "Mushroom", "price": 60},
+    { "name": "Pineapple", "price": 75},
+    { "name": "Black Olive/Green Olive", "price": 90},
+    { "name": "Kanchan Cheese", "price": 90},
+    { "name": "Mozarella Cheese", "price": 120},
+    { "name": "Chicken Pepperoni", "price": 60},
+    { "name": "Sausage", "price": 60},
+    { "name": "Smoked Chicken", "price": 110},
+    { "name": "Salami", "price": 60},
+    { "name": "Ham", "price": 80},
+    { "name": "Bacon Pepperoni", "price": 110}
+  ],
+  "Fire Wood Bakery Items": [
+    { "name": "Donut", "price": 25 }
   ],
   "Chowmein": [
     { "name": "Veg Chowmein", "price": 120 },
     { "name": "Egg Chowmein", "price": 150 },
-    { "name": "Chicken Chowmein", "price": 180 }
+    { "name": "Chicken Chowmein", "price": 180 },
+    { "name": "Mixed Chowmein", "price": 210 }
   ],
   "Thukpa": [
     { "name": "Veg Thukpa", "price": 150 },
-    { "name": "Chicken Thukpa", "price": 180 }
+    { "name": "Egg Thukpa", "price": 220 },
+    { "name": "Chicken Thukpa", "price": 210 },
+    { "name": "Mixed Thhukpa", "price": 230 }
   ],
   "Tea": [
     { "name": "Milk Tea", "price": 25 },
     { "name": "Masala Milk Tea", "price": 35 },
     { "name": "Black Tea", "price": 20 },
+    { "name": "Masala Black Tea", "price": 30 },
     { "name": "Lemon Tea", "price": 25 },
     { "name": "Hot Lemon", "price": 20 },
     { "name": "Hot Lemon w/ Honey", "price": 60 },
@@ -38,38 +62,42 @@
     { "name": "Milk Coffee", "price": 100 },
     { "name": "Black Coffee", "price": 60 }
   ],
-  "Snacks": [
+  "Veg Snacks": [
+    { "name": "Pop Corn", "price": 80 },
+    { "name": "Peanuts Sadheko", "price": 100 },
+    { "name": "Chowchow sadheko", "price": 100 },
+    { "name": "Nachos", "price": 150 },
     { "name": "French Fries", "price": 150 },
+    { "name": "Chips Chilly", "price": 180 },
     { "name": "Mustang Aalu", "price": 180 },
-    { "name": "Chicken Chilly", "price": 280 },
-    { "name": "Chicken Chhoila", "price": 280 },
     { "name": "Mushroom Chhoila", "price": 200 },
     { "name": "Mushroom Chilly", "price": 200 },
-    { "name": "Nachos", "price": 150 },
-    { "name": "Chips Chilly", "price": 180 },
-    { "name": "Pop Corn", "price": 80 },
-    { "name": "Chowchow sadheko", "price": 100 },
-    { "name": "Smoked Chicken Chilly", "price": 380 },
-    { "name": "Peanuts Sadheko", "price": 100 },
-    { "name": "Sausage", "price": 250 },
-    { "name": "Spicy Chicken Wings", "price": 250}
+    { "name": "Paner Chilly", "price": 250 },
+    { "name": "Cheese balls", "price": 300 }
+  ],
+  "Non-Veg Snacks": [
+    { "name": "Spicy Chicken Wings", "price": 250},
+    { "name": "Fried/Boiled Chicken Sausage", "price": 250 },
+    { "name": "Chicken Chilly", "price": 280 },
+    { "name": "Chicken Chhoila", "price": 280 },
+    { "name": "Smoked Chicken Sadheko", "price": 320 }
   ],
   "Momo": {
     "Buff": [
       { "name": "Steam Buff Momo", "price": 150 },
-      { "name": "Jhol Buff Momo", "price": 180 },
-      { "name": "Chhoila Buff Momo", "price": 190 },
       { "name": "Fried Buff Momo", "price": 170 },
-      { "name": "Buff Chilly Momo", "price": 190 },
-      { "name": "Buff Kothey Momo", "price": 180 }
+      { "name": "Jhol Buff Momo", "price": 180 },
+      { "name": "Buff Kothey Momo", "price": 180 },
+      { "name": "Chhoila Buff Momo", "price": 190 },
+      { "name": "Buff Chilly Momo", "price": 190 }
     ],
     "Chicken": [
       { "name": "Steam Chicken Momo", "price": 180 },
+      { "name": "Fried Chicken Momo", "price": 200 },
+      { "name": "Chicken Kothey Momo", "price": 210 },
       { "name": "Jhol Chicken Momo", "price": 210 },
       { "name": "Chhoila Chicken Momo", "price": 220 },
-      { "name": "Fried Chicken Momo", "price": 200 },
-      { "name": "Chicken Chilly Momo", "price": 220 },
-      { "name": "Chicken Kothey Momo", "price": 210 }
+      { "name": "Chicken Chilly Momo", "price": 220 }
     ]
   }
 }
