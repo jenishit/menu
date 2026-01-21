@@ -32,7 +32,9 @@
     { "name": "Bacon Pepperoni", "price": 110}
   ],
   "Fire Wood Bakery Items": [
-    { "name": "Donut", "price": 25 }
+    { "name": "Donut", "price": 25 },
+    { "name": "Veg Patty", "price": 50 },
+    { "name": "Chicken Patty", "price": 90 }
   ],
   "Chowmein": [
     { "name": "Veg Chowmein", "price": 120 },
