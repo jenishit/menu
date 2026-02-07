@@ -107,12 +107,12 @@
     { "name": "Havana", "price": 400 },
     { "name": "Hawaii", "price": 400 },
     { "name": "Paan", "price": 400 },
-    { "name": "Double Melon Ice", "price": 400 },
+    { "name": "Double Melon Ice", "price": 400 }
   ],
   "Cigarettes": [
     { "name": "Shikhar Ice", "price": 25 },
     { "name": "Surya Red", "price": 30 },
     { "name": "Surya Fusion", "price": 30 },
-    { "name": "Surya Light", "price": 30 },
+    { "name": "Surya Light", "price": 30 }
   ]
 }
