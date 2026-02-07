@@ -4,7 +4,7 @@
     { "name": "Grilled Mushroom Pizza", "price": 550 },
     { "name": "Paneer Pizza", "price": 590 },
     { "name": "Veg Paradise Pizza", "price": 630 },
-    { "name": "Chicken Chhoila Pizza", "price": 660 },
+    { "name": "Chicken Chhoila Pizza", "price": 700 },
     { "name": "Chicken Sausage Pizza", "price": 690},
     { "name": "Smoked Chicken Pizza", "price": 700 },
     { "name": "Smoked Chicken Hawaiian Pizza", "price": 750 },
@@ -101,5 +101,18 @@
       { "name": "Chhoila Chicken Momo", "price": 220 },
       { "name": "Chicken Chilly Momo", "price": 220 }
     ]
-  }
+  },
+  "Hukka" : [
+    { "name": "Mint", "price": 400 },
+    { "name": "Havana", "price": 400 },
+    { "name": "Hawaii", "price": 400 },
+    { "name": "Paan", "price": 400 },
+    { "name": "Double Melon Ice", "price": 400 },
+  ],
+  "Cigarettes": [
+    { "name": "Shikhar Ice", "price": 25 },
+    { "name": "Surya Red", "price": 30 },
+    { "name": "Surya Fusion", "price": 30 },
+    { "name": "Surya Light", "price": 30 },
+  ]
 }
