@@ -34,7 +34,7 @@
     { "name": "Cheese balls", "price": 300 }
   ],
   "Non-Veg Snacks": [
-    { "name": "Spicy Chicken Wings", "price": 250},
+    { "name": "Spicy Chicken Wings", "price": 320},
     { "name": "Fried/Boiled Chicken Sausage", "price": 250 },
     { "name": "Chicken Chilly", "price": 280 },
     { "name": "Chicken Chhoila", "price": 280 },
@@ -54,10 +54,10 @@
     { "name": "Mixed Thhukpa", "price": 230 }
   ],
   "Fire Wood Pizza": [
-    { "name": "Margherita Pizza", "price": 460 },
-    { "name": "Grilled Mushroom Pizza", "price": 550 },
+    { "name": "Margherita Pizza", "price": 500 },
+    { "name": "Grilled Mushroom Pizza", "price": 600 },
     { "name": "Paneer Pizza", "price": 590 },
-    { "name": "Veg Paradise Pizza", "price": 630 },
+    { "name": "Veg Paradise Pizza", "price": 650 },
     { "name": "Chicken Chhoila Pizza", "price": 700 },
     { "name": "Chicken Sausage Pizza", "price": 690},
     { "name": "Smoked Chicken Pizza", "price": 700 },
