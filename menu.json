@@ -17,10 +17,23 @@
   ],
   "Holi Special Combo": {
     "Mini Combo": [
-      {"Chicken sekuwa + Chicken Steam Mo:mo": 699}
+      {"name":"Chicken sekuwa + Chicken Steam Mo:mo", "price": 699}
     ],
     "Medium Combo": [
-      {"Chicken Chhoila + Waiwai sadheko + Chicken Mo:mo + Popcorn/Chiura + Choice of drink for 3": 999}
+      {"name":"Chicken Chhoila + Waiwai sadheko + Chicken Mo:mo + Popcorn/Chiura + Choice of drink for 3", "price": 999}
+    ],
+    "Jumbo Combo": [
+      {"name": "Chicken Chhoila + Potato wedges + Waiwai sadheko + Peanuts sadheko + Aago Aroma Supreme Pizza (Veg/Non Veg) + Popcorn + Buffalo wings + Premium Cloud Hukka + Choice of Drink for 5", "price": 2699}
+    ],
+    "Veg Combo": [
+      {"name": "Mustang Aloo + Mushroom Chhoila + Waiwai sadheko + Popcorn/Chiura + Choice of drink for 3", "price": 999}
     ]
-  }
+  },
+  "Snacks": [
+    {"name": "Mustang Aloo", "price": 200},
+    {"name": "Mushroom Chhoila", "price": 250},
+    {"name": "Chicken Chhoila", "price": 320},
+    {"name": "Hot Garlic Wings", "price": 400},
+    {"name": "Chhoila Momo", "price": 250},
+  ]
 }
