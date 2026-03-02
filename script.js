@@ -38,7 +38,7 @@ fetch("menu.json")
             card.className = 'combo-card';
             if (sub === 'Jumbo Combo') card.classList.add('jumbo');
 
-            const size = document.createElement('div');
+            const size = document.createElement('h3');
             size.className = 'combo-size';
             size.textContent = sub;
 
