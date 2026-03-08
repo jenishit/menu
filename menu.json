@@ -16,7 +16,7 @@
     { "name": "Black Tea", "price": 20 },
     { "name": "Masala Black Tea", "price": 30 },
     { "name": "Lemon Tea", "price": 25 },
-    { "name": "Hot Lemon", "price": 20 },
+    { "name": "Hot Lemon", "price": 30 },
     { "name": "Hot Lemon w/ Honey", "price": 60 },
     { "name": "Hot Lemon Honey w/ Ginger", "price": 80 },
     { "name": "Chamomile Tea", "price": 50 },
@@ -28,8 +28,8 @@
   ],
   "Fire Wood Bakery Items": [
     { "name": "Donut", "price": 25 },
-    { "name": "Veg Patty", "price": 50 },
-    { "name": "Chicken Patty", "price": 90 }
+    { "name": "Chocolate Donut", "price": 50 },
+    { "name": "Chocolate Brownie", "price": 100 }
   ],
   "Veg Snacks": [
     { "name": "Pop Corn", "price": 80 },
