@@ -28,7 +28,9 @@
   ],
   "Refreshing Drinks":[
     { "name": "Fresh Lime Soda", "price": 120 },
-    { "name": "Virgin Mojito", "price": 150 }
+    { "name": "Mint Lemonade", "price": 150 },
+    { "name": "Virgin Mojito", "price": 180 },
+    { "name": "Coke/Fanta/Sprite", "price": 100 }
   ],
   "Fire Wood Bakery Items": [
     { "name": "Donut", "price": 25 },
