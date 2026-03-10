@@ -354,3 +354,55 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--ember); border-radius: 2px; }
+
+    /* ── Add these rules to your existing style.css ── */
+
+/* Multi-price row (Pizza & Momo) */
+.menu-item--multi {
+  align-items: flex-start;
+}
+
+.item-multi-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.item-multi-labels,
+.item-multi-prices {
+  display: flex;
+  gap: 18px;
+  justify-content: flex-end;
+}
+
+.item-size-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a08060;
+  min-width: 52px;
+  text-align: center;
+}
+
+.item-multi-prices .item-price {
+  min-width: 52px;
+  text-align: center;
+}
+
+/* Momo protein sub-heading (Buff / Chicken) */
+.momo-subheading {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: #c8a060;
+  letter-spacing: 0.06em;
+  margin: 18px 0 6px 0;
+  padding-left: 2px;
+  border-left: 2px solid #c8a060;
+  padding-left: 10px;
+}
