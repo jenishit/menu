@@ -16,7 +16,7 @@
     { "name": "Black Tea", "price": 20 },
     { "name": "Masala Black Tea", "price": 30 },
     { "name": "Lemon Tea", "price": 25 },
-    { "name": "Hot Lemon", "price": 30 },
+    { "name": "Hot Lemon", "price": 40 },
     { "name": "Hot Lemon w/ Honey", "price": 60 },
     { "name": "Hot Lemon Honey w/ Ginger", "price": 80 },
     { "name": "Chamomile Tea", "price": 50 },
@@ -30,6 +30,8 @@
     { "name": "Fresh Lime Soda", "price": 120 },
     { "name": "Mint Lemonade", "price": 150 },
     { "name": "Virgin Mojito", "price": 180 },
+    { "name": "Fresh Watermelon Juice", "price": 150 },
+    { "name": "Fresh ABC Juice", "price": 250 },
     { "name": "Coke/Fanta/Sprite", "price": 100 }
   ],
   "Fire Wood Bakery Items": [
