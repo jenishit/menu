@@ -31,6 +31,7 @@
     { "name": "Mint Lemonade", "price": 150 },
     { "name": "Virgin Mojito", "price": 180 },
     { "name": "Fresh Watermelon Juice", "price": 150 },
+    { "name": "Watermelon Mojito", "price": 200 },
     { "name": "Fresh ABC Juice", "price": 250 },
     { "name": "Coke/Fanta/Sprite", "price": 100 }
   ],
@@ -100,17 +101,6 @@
         { "name": "Smoked Chicken Hawaiian Pizza", "price": 775 },
         { "name": "Meat Lover Pizza", "price": 800 },
         { "name": "Aago Aroma Supreme Pizza", "price": 900 }
-      ],
-      "Medium size 8 inch": [
-        { "name": "Margherita Pizza", "price": 375 },
-        { "name": "Grilled Mushroom Pizza", "price": 425 },
-        { "name": "Veg Paradise Pizza", "price": 460 },
-        { "name": "Smoked Chicken Pizza", "price": 530 },
-        { "name": "Ham Hawaiian Pizza", "price": 530 },
-        { "name": "Pepperoni Chicken Pizza", "price": 550 },
-        { "name": "Smoked Chicken Hawaiian Pizza", "price": 560 },
-        { "name": "Meat Lover Pizza", "price": 580 },
-        { "name": "Aago Aroma Supreme Pizza", "price": 600 }
       ]
   },
   "Extra Toppings":[
