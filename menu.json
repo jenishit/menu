@@ -1,4 +1,9 @@
 {
+  "Shake the heat off" :[
+    { "name": "Vanilla Milkshake", "price": 180 },
+    { "name": "Chocolate Milkshake", "price": 200 },
+    { "name": "Oreo Milkshake", "price": 230 }
+  ],
   "Special Combo": {
     "Medium Combo": [
       {"name":"Chicken Chhoila + Waiwai sadheko + Chicken Mo:mo + Popcorn/Chiura + Choice of drink for 3", "price": 999}
