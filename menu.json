@@ -43,6 +43,8 @@
   "Fire Wood Bakery Items": [
     { "name": "Donut", "price": 25 },
     { "name": "Chocolate Donut", "price": 50 },
+    { "name": "Cinnamon Roll", "price": 50 },
+    { "name": "Chicken Patty", "price": 90 },
     { "name": "Chocolate Brownie", "price": 100 }
   ],
   "Veg Snacks": [
