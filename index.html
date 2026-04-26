@@ -1,79 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aago Aroma — Menu</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css"/>
-</head>
-
-<body>
-  <header class="navbar" id="navbar">
-    <img src="Light-Logo.png" alt="Aago Aroma" class="nav-logo" />
-    <div class="nav-title">
-      <div class="flame-bar">
-        <span></span>
-        <span></span>
-      </div>
-      <h1><em>Aago</em> Aroma</h1>
-      <p class="tagline">Where Fire Crafts Flavor</p>
-    </div>
-  </header>
-
-  <!-- spacer so content starts below the hero header -->
-  <div id="hero-spacer"></div>
-
-  <div class="hero-divider">
-    <div class="divider"></div>
-  </div>
-
-  <main id="menu-container">
-    <!-- <div id="offer-section">
-      <h1>Offer! Offer!! Offer!!!</h1>
-      <p>15% off on all pizza items today</p>
-    </div> -->
-  </main>
-
-  <footer>
-    <p>Aago Aroma &nbsp;·&nbsp; All prices in NPR &nbsp;·&nbsp; Subject to change</p>
-  </footer>
-
-  <script src="script.js"></script>
-  <script>
-    const navbar = document.getElementById('navbar');
-    const spacer = document.getElementById('hero-spacer');
-    let heroH = 0;
-
-    function setSpacerHeight() {
-      heroH = navbar.offsetHeight;
-      spacer.style.height = heroH + 'px';
-    }
-
-    function onScroll() {
-      if (window.scrollY > heroH * 0.4) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
-    }
-
-    // Wait for the stamp image to load before measuring hero height
-    const logo = navbar.querySelector('.nav-logo');
-    if (logo.complete) {
-      setSpacerHeight();
-    } else {
-      logo.addEventListener('load', setSpacerHeight);
-      logo.addEventListener('error', setSpacerHeight); // fallback if image missing
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => {
-      setSpacerHeight();
-      onScroll();
-    });
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aago Aroma</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
