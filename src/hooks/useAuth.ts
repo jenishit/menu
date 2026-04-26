@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, type User } from 'firebase/auth';
 import { auth } from '../firebase';
-import { User } from 'firebase/auth/cordova';
 
 export function useAuth() {
   const [user, setUser]       = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (firebaseUser: User) => {
+    const unsub = onAuthStateChanged(auth, (firebaseUser: User | null) => {
       setUser(firebaseUser);
       setLoading(false);
     });
