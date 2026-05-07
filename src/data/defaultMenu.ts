@@ -1,0 +1,154 @@
+import type { MenuData } from '../types';
+
+export function getDefaultMenu(): MenuData {
+  return {
+    'Shake the heat off': [
+      { name: 'Vanilla Milkshake', price: 180 },
+      { name: 'Chocolate Milkshake', price: 200 },
+      { name: 'Oreo Milkshake', price: 230 },
+    ],
+    'Special Combo': {
+      'Medium Combo': [
+        {
+          name: 'Chicken Chhoila + Waiwai sadheko + Chicken Mo:mo + Popcorn/Chiura + Choice of drink for 3',
+          price: 999,
+        },
+      ],
+      'Jumbo Combo': [
+        {
+          name: 'Chicken Chhoila + Potato wedges + Waiwai sadheko + Peanuts sadheko + Aago Aroma Supreme Pizza (Veg/Non Veg) + Popcorn + Buffalo wings + Premium Cloud Hukka + Choice of Drink for 5',
+          price: 2699,
+        },
+      ],
+      'Veg Combo': [
+        {
+          name: 'Mustang Aloo + Mushroom Chhoila + Waiwai sadheko + Popcorn/Chiura + Choice of drink for 3',
+          price: 999,
+        },
+      ],
+    },
+    Tea: [
+      { name: 'Milk Tea', price: 25 },
+      { name: 'Masala Milk Tea', price: 40 },
+      { name: 'Black Tea', price: 20 },
+      { name: 'Masala Black Tea', price: 30 },
+      { name: 'Lemon Tea', price: 25 },
+      { name: 'Hot Lemon', price: 40 },
+      { name: 'Hot Lemon w/ Honey', price: 60 },
+      { name: 'Hot Lemon Honey w/ Ginger', price: 80 },
+      { name: 'Chamomile Tea', price: 50 },
+      { name: 'Fruit Tea', price: 50 },
+    ],
+    Coffee: [
+      { name: 'Milk Coffee', price: 100 },
+      { name: 'Black Coffee', price: 80 },
+    ],
+    'Refreshing Drinks': [
+      { name: 'Fresh Lime Soda', price: 120 },
+      { name: 'Mint Lemonade', price: 150 },
+      { name: 'Virgin Mojito', price: 180 },
+      { name: 'Fresh Watermelon Juice', price: 150 },
+      { name: 'Watermelon Mojito', price: 200 },
+      { name: 'Fresh ABC Juice', price: 250 },
+      { name: 'Coke/Fanta/Sprite', price: 100 },
+    ],
+    'Fire Wood Bakery Items': [
+      { name: 'Donut', price: 25 },
+      { name: 'Chocolate Donut', price: 50 },
+      { name: 'Cinnamon Roll', price: 50 },
+      { name: 'Chicken Patty', price: 90 },
+      { name: 'Chocolate Brownie', price: 100 },
+    ],
+    'Veg Snacks': [
+      { name: 'Pop Corn', price: 80 },
+      { name: 'Peanuts Sadheko', price: 100 },
+      { name: 'Chowchow sadheko', price: 100 },
+      { name: 'Nachos', price: 150 },
+      { name: 'French Fries', price: 150 },
+      { name: 'Chips Chilly', price: 180 },
+      { name: 'Mustang Aalu', price: 180 },
+      { name: 'Mushroom Chhoila', price: 200 },
+      { name: 'Mushroom Chilly', price: 200 },
+      { name: 'Paner Chilly', price: 250 },
+      { name: 'Cheese balls', price: 300 },
+    ],
+    'Non-Veg Snacks': [
+      { name: 'Spicy Chicken Wings', price: 320 },
+      { name: 'Fried/Boiled Chicken Sausage', price: 250 },
+      { name: 'Chicken Chilly', price: 280 },
+      { name: 'Chicken Chhoila', price: 280 },
+      { name: 'Smoked Chicken Sadheko', price: 320 },
+    ],
+    Momo: {
+      Buff: [
+        { name: 'Steam Buff Momo', price: 150 },
+        { name: 'Fried Buff Momo', price: 170 },
+        { name: 'Jhol Buff Momo', price: 180 },
+        { name: 'Buff Kothey Momo', price: 180 },
+        { name: 'Chhoila Buff Momo', price: 190 },
+        { name: 'Buff Chilly Momo', price: 190 },
+      ],
+      Chicken: [
+        { name: 'Steam Chicken Momo', price: 180 },
+        { name: 'Fried Chicken Momo', price: 200 },
+        { name: 'Chicken Kothey Momo', price: 210 },
+        { name: 'Jhol Chicken Momo', price: 210 },
+        { name: 'Chhoila Chicken Momo', price: 220 },
+        { name: 'Chicken Chilly Momo', price: 220 },
+      ],
+    },
+    Chowmein: [
+      { name: 'Veg Chowmein', price: 120 },
+      { name: 'Egg Chowmein', price: 150 },
+      { name: 'Chicken Chowmein', price: 180 },
+      { name: 'Mixed Chowmein', price: 210 },
+    ],
+    Thukpa: [
+      { name: 'Veg Thukpa', price: 150 },
+      { name: 'Egg Thukpa', price: 220 },
+      { name: 'Chicken Thukpa', price: 210 },
+      { name: 'Mixed Thhukpa', price: 230 },
+    ],
+    'Fire Wood Pizza': {
+      'Large size 12 inch': [
+        { name: 'Margherita Pizza', price: 500 },
+        { name: 'Grilled Mushroom Pizza', price: 600 },
+        { name: 'Veg Paradise Pizza', price: 650 },
+        { name: 'Smoked Chicken Pizza', price: 700 },
+        { name: 'Ham Hawaiian Pizza', price: 700 },
+        { name: 'Pepperoni Chicken Pizza', price: 750 },
+        { name: 'Smoked Chicken Hawaiian Pizza', price: 775 },
+        { name: 'Meat Lover Pizza', price: 800 },
+        { name: 'Aago Aroma Supreme Pizza', price: 900 },
+      ],
+    },
+    'Extra Toppings': [
+      { name: 'Onion', price: 20 },
+      { name: 'Capsicum', price: 30 },
+      { name: 'Mushroom', price: 60 },
+      { name: 'Pineapple', price: 75 },
+      { name: 'Black Olive/Green Olive', price: 90 },
+      { name: 'Kanchan Cheese', price: 90 },
+      { name: 'Mozarella Cheese', price: 120 },
+      { name: 'Chicken Pepperoni', price: 60 },
+      { name: 'Sausage', price: 60 },
+      { name: 'Smoked Chicken', price: 110 },
+      { name: 'Salami', price: 60 },
+      { name: 'Ham', price: 80 },
+      { name: 'Bacon Pepperoni', price: 110 },
+    ],
+    Hukka: [
+      { name: 'Mint', price: 400 },
+      { name: 'Havana', price: 400 },
+      { name: 'Hawaii', price: 400 },
+      { name: 'Paan', price: 400 },
+      { name: 'Double Melon Ice', price: 400 },
+    ],
+    Cigarettes: [
+      { name: 'Shikhar Ice', price: 25 },
+      { name: 'Surya Red', price: 30 },
+      { name: 'Surya Fusion', price: 30 },
+      { name: 'Surya Light', price: 30 },
+    ],
+  };
+}

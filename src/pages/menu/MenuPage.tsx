@@ -1,25 +1,24 @@
-import { Link }            from 'react-router-dom';
-import Navbar             from './components/Navbar';
-import CategorySection    from './components/CategoryBlock';
-import { useMenu }        from '../../hooks/useMenu';
+import { Link } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import CategorySection from './components/CategoryBlock';
+import { useMenu } from '../../hooks/useMenu';
 
 export default function MenuPage() {
   const { menu, loading, error } = useMenu();
   const categories = menu ? Object.keys(menu) : [];
 
   return (
-    <div className="menu-page min-h-screen">
+    <div className="grain-overlay glow-overlay min-h-screen">
       <Navbar categories={categories} />
 
       {/* Hero divider */}
-      <div className="hero-divider">
-        <div className="divider" />
+      <div className="flex justify-center h-[200px]">
+        <div className="w-px h-[60px] bg-gradient-to-b from-transparent via-gold to-transparent animate-fade-up" />
       </div>
 
       {/* Menu content */}
       <main
-        className="relative z-10 max-w-[780px] mx-auto px-6 pb-32"
-        style={{ minHeight: '60vh' }}
+        className="relative z-10 max-w-[780px] mx-auto px-6 pb-32 min-h-[60vh]"
       >
         {loading && (
           <p className="text-center text-muted text-sm tracking-widest uppercase mt-20 animate-pulse">
@@ -27,7 +26,9 @@ export default function MenuPage() {
           </p>
         )}
         {error && (
-          <p className="text-center text-ember text-sm tracking-wide mt-20">{error}</p>
+          <p className="text-center text-ember text-sm tracking-wide mt-20">
+            {error}
+          </p>
         )}
         {menu &&
           Object.entries(menu).map(([catName, catValue], idx) => (
