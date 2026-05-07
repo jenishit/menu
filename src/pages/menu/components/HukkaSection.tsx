@@ -17,13 +17,13 @@ const SHEESHA_ITEMS = [
   },
   {
     name: 'Chilled Sheesha',
-    price: 'Rs. 700/- (Launching soon)',
+    price: 'Rs. 700/-',
     description:
       'Served with iced chillum with added fruits (watermelon, pineapple etc) coconut coil, ice pipe, and diverse Aago Aroma special flavours.',
   },
   {
     name: 'Aago Aromaa Premium Sheesha',
-    price: 'Rs. 999/-',
+    price: 'Rs. 999/- (Launching soon)',
     description:
       'Served with matching fruit-based chillum to its alternate flavors (pineapple, watermelon/ tea flavors/ crushed ice/ mint/ etc.) with crushed ice, coconut coil, iced pipe, and a range of special single/mix of any available flavors with free change of the coil.',
   },
