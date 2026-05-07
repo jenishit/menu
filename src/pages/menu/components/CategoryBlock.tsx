@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { isFlatCategory } from '../../../types';
 import type { CategoryValue, MenuItem } from '../../../types';
+import HukkaSection from './HukkaSection';
 
 interface Props {
   id: string;
@@ -28,6 +29,11 @@ export default function CategorySection({ id, name, index, value }: Props) {
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
+
+  // ── Special full-page layout for Hukka ────────────────────────────────
+  if (name === 'Hukka') {
+    return <HukkaSection id={id} name={name} index={index} value={value} />;
+  }
 
   return (
     <div id={id} ref={ref} className="category">

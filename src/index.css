@@ -351,3 +351,237 @@ body {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   HUKKA / SHEESHA SECTION — bespoke full-width layout
+   ───────────────────────────────────────────────────────────────────────── */
+
+.hukka-section {
+  position: relative;
+  margin-top: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+  /* Teal-to-dark gradient like the reference image */
+  background: linear-gradient(
+    160deg,
+    #4a7c7e 0%,
+    #3a6568 18%,
+    #2d5255 35%,
+    #1f3c40 55%,
+    #1a2e33 75%,
+    #141f25 100%
+  );
+  padding: 48px 40px 48px 200px;
+  min-height: 500px;
+}
+
+/* ── Hookah image ──────────────────────────────────────────────────────── */
+.hukka-hookah-img {
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  height: 1000px;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.45));
+}
+.hukka-hookah-img img {
+  width: 100%;
+  height: 100%;
+  object-fit:fill;
+}
+
+/* ── Content ───────────────────────────────────────────────────────────── */
+.hukka-content {
+  position: relative;
+  z-index: 3;
+}
+
+/* Title */
+.hukka-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 6vw, 54px);
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 32px;
+  line-height: 1.1;
+  text-shadow: 2px 3px 8px rgba(0, 0, 0, 0.4);
+}
+.hukka-title::after {
+  content: '';
+  display: block;
+  width: 90px;
+  height: 3px;
+  margin-top: 12px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.7), transparent);
+  border-radius: 2px;
+}
+
+/* ── Products ──────────────────────────────────────────────────────────── */
+.hukka-products {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 38px;
+}
+
+.hukka-product {
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.hukka-product:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.hukka-product-name {
+  font-family: 'Jost', sans-serif;
+  font-size: clamp(15px, 2.5vw, 19px);
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.hukka-product-divider {
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 6px;
+  font-weight: 300;
+}
+
+.hukka-product-price {
+  color: #fff;
+  font-weight: 700;
+}
+
+.hukka-product-desc {
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.55;
+  max-width: 520px;
+  letter-spacing: 0.01em;
+}
+
+/* ── Flavours ──────────────────────────────────────────────────────────── */
+.hukka-flavours {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 28px 32px;
+  margin-bottom: 36px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.hukka-flavours-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(26px, 4vw, 36px);
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 18px;
+  line-height: 1;
+}
+
+.hukka-flavours-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 32px;
+}
+
+.hukka-flavour-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.hukka-flavour-list li {
+  font-family: 'Jost', sans-serif;
+  font-size: 14.5px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.88);
+  padding: 5px 0;
+  padding-left: 16px;
+  position: relative;
+  letter-spacing: 0.01em;
+}
+.hukka-flavour-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
+}
+
+/* ── Tagline ───────────────────────────────────────────────────────────── */
+.hukka-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(18px, 3vw, 24px);
+  font-weight: 700;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.35;
+  max-width: 440px;
+  letter-spacing: 0.01em;
+}
+
+/* ── Bottom pink/purple accent gradient (like the reference) ───────────── */
+.hukka-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(
+    to top,
+    rgba(140, 70, 100, 0.35) 0%,
+    rgba(100, 60, 90, 0.15) 40%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  .hukka-section {
+    padding: 36px 20px 36px 20px;
+  }
+
+  .hukka-hookah-img {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: 160px;
+    margin: 0 auto 20px;
+    display: block;
+  }
+
+  .hukka-flavours-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .hukka-flavours {
+    padding: 20px 20px;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 900px) {
+  .hukka-section {
+    padding-left: 180px;
+  }
+  .hukka-hookah-img {
+    width: 180px;
+    left: -10px;
+  }
+}
