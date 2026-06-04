@@ -22,6 +22,8 @@ export default function ItemModal({
 }: ItemModalProps) {
   const [name, setName] = useState(initial?.name ?? '');
   const [price, setPrice] = useState(initial?.price?.toString() ?? '');
+  const [description, setDescription] = useState(initial?.description ?? '');
+  const [sortOrder, setSortOrder] = useState(initial?.sort_order?.toString() ?? '');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -33,7 +35,13 @@ export default function ItemModal({
       return;
     }
     setBusy(true);
-    await onSave({ name: name.trim(), price: p });
+    const item: MenuItem = {
+      name: name.trim(),
+      price: p,
+      description: description.trim() || undefined,
+      sort_order: sortOrder ? parseInt(sortOrder, 10) : undefined,
+    };
+    await onSave(item);
     setBusy(false);
   }
 
@@ -75,6 +83,37 @@ export default function ItemModal({
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             placeholder="e.g. 150"
+            className="w-full bg-bg border border-gold/20 text-cream text-sm font-light
+                       px-4 py-2.5 placeholder-muted/40 focus:outline-none focus:border-gold/50
+                       transition-colors tracking-wide"
+          />
+        </div>
+
+        <div>
+          <label className="block text-[10px] tracking-[0.28em] uppercase text-muted mb-1.5">
+            Description (Optional)
+          </label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="e.g. Premium quality tea leaves"
+            rows={3}
+            className="w-full bg-bg border border-gold/20 text-cream text-sm font-light
+                       px-4 py-2.5 placeholder-muted/40 focus:outline-none focus:border-gold/50
+                       transition-colors tracking-wide resize-none"
+          />
+        </div>
+
+        <div>
+          <label className="block text-[10px] tracking-[0.28em] uppercase text-muted mb-1.5">
+            Sort Order (Optional)
+          </label>
+          <input
+            type="number"
+            min={0}
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            placeholder="e.g. 1"
             className="w-full bg-bg border border-gold/20 text-cream text-sm font-light
                        px-4 py-2.5 placeholder-muted/40 focus:outline-none focus:border-gold/50
                        transition-colors tracking-wide"

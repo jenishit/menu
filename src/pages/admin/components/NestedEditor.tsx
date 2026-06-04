@@ -9,6 +9,7 @@ interface NestedEditorProps {
   onAddItem: () => void;
   onEditItem: (idx: number) => void;
   onDeleteItem: (idx: number, name: string) => void;
+  onReorderItem: (fromIdx: number, toIdx: number) => void;
 }
 
 export default function NestedEditor({
@@ -19,6 +20,7 @@ export default function NestedEditor({
   onAddItem,
   onEditItem,
   onDeleteItem,
+  onReorderItem,
 }: NestedEditorProps) {
   const subs = Object.keys(value);
   const items = activeSub ? (value[activeSub] ?? []) : [];
@@ -65,7 +67,7 @@ export default function NestedEditor({
         </button>
       </div>
 
-      <ItemRows items={items} onEdit={onEditItem} onDelete={onDeleteItem} />
+      <ItemRows items={items} onEdit={onEditItem} onDelete={onDeleteItem} onReorder={onReorderItem} />
     </>
   );
 }

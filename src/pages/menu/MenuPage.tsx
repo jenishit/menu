@@ -12,13 +12,13 @@ export default function MenuPage() {
       <Navbar categories={categories} />
 
       {/* Hero divider */}
-      <div className="flex justify-center h-[200px]">
-        <div className="w-px h-[60px] bg-gradient-to-b from-transparent via-gold to-transparent animate-fade-up" />
+      <div className="flex justify-center h-50">
+        <div className="w-px h-15 bg-linear-to-b from-transparent via-gold to-transparent animate-fade-up" />
       </div>
 
       {/* Menu content */}
       <main
-        className="relative z-10 max-w-[780px] mx-auto px-6 pb-32 min-h-[60vh]"
+        className="relative z-10 max-w-195 mx-auto px-6 pb-32 min-h-[60vh]"
       >
         {loading && (
           <p className="text-center text-muted text-sm tracking-widest uppercase mt-20 animate-pulse">

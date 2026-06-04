@@ -64,6 +64,8 @@ export default function AdminPage() {
   const [selectedSub, setSelectedSub] = useState<string | null>(null);
   const [modal, setModal] = useState<ReactNode>(null);
   const [toast, setToast] = useState<ToastState>(null);
+  const [draggedCatIdx, setDraggedCatIdx] = useState<number | null>(null);
+  const [draggedItemIdx, setDraggedItemIdx] = useState<number | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout>>();
 
   // ── Load menu ─────────────────────────────────────────────────────────────
@@ -137,6 +139,71 @@ export default function AdminPage() {
     return next;
   }
 
+  // ── Category drag & drop ───────────────────────────────────────────────────
+  function handleCategoryDragStart(idx: number) {
+    setDraggedCatIdx(idx);
+  }
+
+  function handleCategoryDragOver(e: React.DragEvent) {
+    e.preventDefault();
+  }
+
+  function handleCategoryDrop(targetIdx: number) {
+    if (draggedCatIdx === null || draggedCatIdx === targetIdx || !menu) return;
+    
+    const cats = Object.keys(menu);
+    const newCats = [...cats];
+    const [draggedCat] = newCats.splice(draggedCatIdx, 1);
+    newCats.splice(targetIdx, 0, draggedCat);
+    
+    // Rebuild menu in new order
+    const next: MenuData = {};
+    newCats.forEach((cat, idx) => {
+      next[cat] = menu[cat];
+      // Update category sort_order in all items
+      const catVal = menu[cat];
+      if (isFlatCategory(catVal)) {
+        next[cat] = catVal.map((item) => ({
+          ...item,
+          sort_order: (item.sort_order ?? 0) + (targetIdx - draggedCatIdx) * 1000,
+        }));
+      }
+    });
+    
+    persist(next);
+    setDraggedCatIdx(null);
+    if (selectedCat === cats[draggedCatIdx]) {
+      setSelectedCat(draggedCat);
+    }
+  }
+
+  // ── Item drag & drop ───────────────────────────────────────────────────────
+  function handleItemDragStart(idx: number) {
+    setDraggedItemIdx(idx);
+  }
+
+  function handleItemDragOver(e: React.DragEvent) {
+    e.preventDefault();
+  }
+
+  function handleItemDrop(targetIdx: number) {
+    if (draggedItemIdx === null || draggedItemIdx === targetIdx) return;
+
+    const items = [...getItems()];
+    const [draggedItem] = items.splice(draggedItemIdx, 1);
+    items.splice(targetIdx, 0, draggedItem);
+
+    // Update sort_order for all items based on new position
+    const updatedItems = items.map((item, idx) => ({
+      ...item,
+      sort_order: idx + 1,
+    }));
+
+    const next = updateItems(updatedItems);
+    if (next) persist(next);
+    setDraggedItemIdx(null);
+  }
+
   // ── Add / Edit item ───────────────────────────────────────────────────────
   function openItemModal(editIdx: number | null) {
     const existing = editIdx !== null ? getItems()[editIdx] : null;
@@ -188,9 +255,10 @@ export default function AdminPage() {
     setModal(
       <AddCategoryModal
         onClose={closeModal}
-        onSave={async (name, type) => {
+        onSave={async (name, type, _sortOrder) => {
           if (!menu) return;
           const next = { ...menu, [name]: type === 'flat' ? [] : {} };
+          // TODO: sortOrder can be stored in a separate metadata collection in Firestore if needed
           await persist(next);
           selectCat(name);
           closeModal();
@@ -362,7 +430,7 @@ export default function AdminPage() {
             Seed Menu
           </button>
           <span className="text-muted/30 hidden sm:block">|</span>
-          <span className="text-[10px] tracking-wide text-muted/50 hidden sm:block truncate max-w-[180px]">
+          <span className="text-[10px] tracking-wide text-muted/50 hidden sm:block truncate max-w-45">
             {user?.email}
           </span>
           <button
@@ -390,16 +458,22 @@ export default function AdminPage() {
             </button>
           </div>
           <ul className="flex-1 overflow-y-auto py-2 space-y-0.5 px-2">
-            {Object.keys(menu).map((cat) => (
+            {Object.keys(menu).map((cat, idx) => (
               <li
                 key={cat}
+                draggable
+                onDragStart={() => handleCategoryDragStart(idx)}
+                onDragOver={handleCategoryDragOver}
+                onDrop={() => handleCategoryDrop(idx)}
+                onDragEnd={() => setDraggedCatIdx(null)}
                 onClick={() => selectCat(cat)}
                 className={[
-                  'cursor-pointer px-3 py-2.5 rounded-sm text-sm font-light tracking-wide',
+                  'cursor-move px-3 py-2.5 rounded-sm text-sm font-light tracking-wide',
                   'border-l-2 transition-all duration-200 select-none',
+                  draggedCatIdx === idx ? 'opacity-50 bg-gold/10' : '',
                   cat === selectedCat
                     ? 'border-ember bg-ember/5 text-ember'
-                    : 'border-transparent text-cream/70 hover:border-gold/30 hover:bg-white/[0.03] hover:text-cream',
+                    : 'border-transparent text-cream/70 hover:border-gold/30 hover:bg-white/3 hover:text-cream',
                 ].join(' ')}
               >
                 {cat}
@@ -445,6 +519,7 @@ export default function AdminPage() {
                 onAddItem={() => openItemModal(null)}
                 onEditItem={openItemModal}
                 onDeleteItem={openDeleteItem}
+                onReorderItem={handleItemDrop}
               />
             ) : (
               <FlatEditor
@@ -452,6 +527,7 @@ export default function AdminPage() {
                 onAddItem={() => openItemModal(null)}
                 onEditItem={openItemModal}
                 onDeleteItem={openDeleteItem}
+                onReorderItem={handleItemDrop}
               />
             )}
           </main>

@@ -1,8 +1,10 @@
 // ── Menu data types ────────────────────────────────────────────────────────
 
 export interface MenuItem {
-  name:  string;
+  name: string;
   price: number;
+  description?: string;
+  sort_order?: number;
 }
 
 /** A simple list of items (Tea, Coffee, Snacks …) */

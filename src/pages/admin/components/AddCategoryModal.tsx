@@ -5,7 +5,7 @@ import ModalShell from './ModalShell';
 interface AddCategoryModalProps {
   existingNames: string[];
   onClose: () => void;
-  onSave: (name: string, type: 'flat' | 'nested') => Promise<void>;
+  onSave: (name: string, type: 'flat' | 'nested', sortOrder?: number) => Promise<void>;
 }
 
 export default function AddCategoryModal({
@@ -15,6 +15,7 @@ export default function AddCategoryModal({
 }: AddCategoryModalProps) {
   const [name, setName] = useState('');
   const [type, setType] = useState<'flat' | 'nested'>('flat');
+  const [sortOrder, setSortOrder] = useState('');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -29,7 +30,8 @@ export default function AddCategoryModal({
       return;
     }
     setBusy(true);
-    await onSave(name.trim(), type);
+    const so = sortOrder ? parseInt(sortOrder, 10) : undefined;
+    await onSave(name.trim(), type, so);
     setBusy(false);
   }
 
@@ -69,6 +71,22 @@ export default function AddCategoryModal({
             <option value="flat">Simple list — items with name & price</option>
             <option value="nested">Grouped — sub-categories (like Momo, Pizza)</option>
           </select>
+        </div>
+
+        <div>
+          <label className="block text-[10px] tracking-[0.28em] uppercase text-muted mb-1.5">
+            Sort Order (Optional)
+          </label>
+          <input
+            type="number"
+            min={0}
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            placeholder="e.g. 1"
+            className="w-full bg-bg border border-gold/20 text-cream text-sm font-light
+                       px-4 py-2.5 placeholder-muted/40 focus:outline-none focus:border-gold/50
+                       transition-colors"
+          />
         </div>
 
         {err && <p className="text-red-400 text-xs tracking-wide">{err}</p>}

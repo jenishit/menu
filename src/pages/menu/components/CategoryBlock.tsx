@@ -50,7 +50,7 @@ export default function CategorySection({ id, name, index, value }: Props) {
           </span>
           {name}
         </h2>
-        <div className="flex-1 h-px bg-gradient-to-r from-line to-transparent" />
+        <div className="flex-1 h-px bg-linear-to-r from-line to-transparent" />
       </div>
 
       {/* Category content */}
@@ -69,31 +69,45 @@ export default function CategorySection({ id, name, index, value }: Props) {
 
 /* ── Flat list ───────────────────────────────────────────────────────────── */
 function FlatList({ items }: { items: MenuItem[] }) {
+  // Sort items by sort_order if available, otherwise maintain order
+  const sorted = [...items].sort((a, b) => {
+    const aOrder = a.sort_order ?? Infinity;
+    const bOrder = b.sort_order ?? Infinity;
+    return aOrder - bOrder;
+  });
+
   return (
     <>
-      {items.map((item, i) => (
+      {sorted.map((item, i) => (
         <div
           key={i}
-          className="group flex items-baseline justify-between py-3.5 border-b border-line
+          className="group py-3.5 border-b border-line
                      relative cursor-default transition-all duration-250
                      hover:pl-2.5"
         >
           {/* Left accent bar on hover */}
           <span
-            className="absolute left-[-12px] top-1/2 -translate-y-1/2 w-[3px] h-0
+            className="absolute -left-3 top-1/2 -translate-y-1/2 w-0.75 h-0
                        bg-ember rounded-sm transition-all duration-250
                        group-hover:h-[60%]"
           />
-          <span className="text-xl font-light tracking-[0.04em] text-cream max-w-[75%] leading-relaxed">
-            {item.name}
-          </span>
-          <span className="flex-1 border-b border-dotted border-gold/20 mx-3 relative top-[-4px]" />
-          <span className="font-display text-xl font-normal text-gold whitespace-nowrap tracking-[0.03em]">
-            <span className="text-sm tracking-[0.1em] opacity-70 mr-0.5 font-body font-extralight">
-              Rs.
+          <div className="flex items-baseline justify-between">
+            <span className="text-xl font-light tracking-[0.04em] text-cream max-w-[75%] leading-relaxed">
+              {item.name}
             </span>
-            {item.price}
-          </span>
+            <span className="flex-1 border-b border-dotted border-gold/20 mx-3 relative top-1" />
+            <span className="font-display text-xl font-normal text-gold whitespace-nowrap tracking-[0.03em]">
+              <span className="text-sm tracking-widest opacity-70 mr-0.5 font-body font-extralight">
+                Rs.
+              </span>
+              {item.price}
+            </span>
+          </div>
+          {item.description && (
+            <p className="text-sm text-muted/70 font-light tracking-wide mt-1.5 leading-relaxed">
+              {item.description}
+            </p>
+          )}
         </div>
       ))}
     </>
@@ -105,64 +119,81 @@ function PizzaSection({ value }: { value: Record<string, MenuItem[]> }) {
   const sizes = Object.keys(value);
   const shortLabels = sizes.map((s) => s.match(/large|medium/i)?.[0] ?? s);
 
-  // Build { pizzaName: { sizeLabel: price } }
+  // Build { pizzaName: { sizeLabel: price }, descriptions, ...}
   const pizzaMap = new Map<string, Record<string, number>>();
-  const pizzaOrder: string[] = [];
+  const pizzaDesc = new Map<string, string | undefined>();
+  const pizzaOrder = new Map<string, number | undefined>();
+  const pizzaOrder_list: string[] = [];
   sizes.forEach((sizeLabel) => {
     value[sizeLabel].forEach((item) => {
       if (!pizzaMap.has(item.name)) {
         pizzaMap.set(item.name, {});
-        pizzaOrder.push(item.name);
+        pizzaDesc.set(item.name, item.description);
+        pizzaOrder.set(item.name, item.sort_order);
+        pizzaOrder_list.push(item.name);
       }
       pizzaMap.get(item.name)![sizeLabel] = item.price;
     });
   });
 
+  // Sort by sort_order
+  const sortedPizzas = pizzaOrder_list.sort((a, b) => {
+    const aOrder = pizzaOrder.get(a) ?? Infinity;
+    const bOrder = pizzaOrder.get(b) ?? Infinity;
+    return aOrder - bOrder;
+  });
+
   return (
     <>
-      {pizzaOrder.map((pizzaName) => (
-        <div
-          key={pizzaName}
-          className="group flex items-start justify-between py-3.5 border-b border-line
-                     relative cursor-default transition-all duration-250
-                     hover:pl-2.5"
-        >
-          <span
-            className="absolute left-[-12px] top-1/2 -translate-y-1/2 w-[3px] h-0
-                       bg-ember rounded-sm transition-all duration-250
-                       group-hover:h-[60%]"
-          />
-          <span className="text-xl font-light tracking-[0.04em] text-cream max-w-[75%] leading-relaxed">
-            {pizzaName}
-          </span>
-          <span className="flex-1 border-b border-dotted border-gold/20 mx-3 relative top-[-4px]" />
-          <div className="flex flex-col items-end gap-0.5 shrink-0">
-            <div className="flex gap-4.5 justify-end">
-              {sizes.map((_, i) => (
-                <span
-                  key={i}
-                  className="font-body text-[0.68rem] font-light tracking-[0.08em]
-                             uppercase text-[#a08060] min-w-[52px] text-center"
-                >
-                  {shortLabels[i]}
-                </span>
-              ))}
-            </div>
-            <div className="flex gap-4.5 justify-end">
-              {sizes.map((sizeLabel, i) => (
-                <span
-                  key={i}
-                  className="font-display text-xl font-normal text-gold whitespace-nowrap
-                             tracking-[0.03em] min-w-[52px] text-center"
-                >
-                  <span className="text-sm tracking-[0.1em] opacity-70 mr-0.5 font-body font-extralight">
-                    Rs.
+      {sortedPizzas.map((pizzaName) => (
+        <div key={pizzaName}>
+          <div
+            className="group flex items-start justify-between py-3.5 border-b border-line
+                       relative cursor-default transition-all duration-250
+                       hover:pl-2.5"
+          >
+            <span
+              className="absolute -left-3 top-1/2 -translate-y-1/2 w-0.75 h-0
+                         bg-ember rounded-sm transition-all duration-250
+                         group-hover:h-[60%]"
+            />
+            <span className="text-xl font-light tracking-[0.04em] text-cream max-w-[75%] leading-relaxed">
+              {pizzaName}
+            </span>
+            <span className="flex-1 border-b border-dotted border-gold/20 mx-3 relative -top-1" />
+            <div className="flex flex-col items-end gap-0.5 shrink-0">
+              <div className="flex gap-4.5 justify-end">
+                {sizes.map((_, i) => (
+                  <span
+                    key={i}
+                    className="font-body text-[0.68rem] font-light tracking-[0.08em]
+                               uppercase text-[#a08060] min-w-13 text-center"
+                  >
+                    {shortLabels[i]}
                   </span>
-                  {pizzaMap.get(pizzaName)?.[sizeLabel] ?? '—'}
-                </span>
-              ))}
+                ))}
+              </div>
+              <div className="flex gap-4.5 justify-end">
+                {sizes.map((sizeLabel, i) => (
+                  <span
+                    key={i}
+                    className="font-display text-xl font-normal text-gold whitespace-nowrap
+                               tracking-[0.03em] min-w-13 text-center"
+                  >
+                    <span className="text-sm tracking-widest opacity-70 mr-0.5 font-body font-extralight">
+                      Rs.
+                    </span>
+                    {pizzaMap.get(pizzaName)?.[sizeLabel] ?? '—'}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
+          {pizzaDesc.get(pizzaName) && (
+            <p className="text-sm text-muted/70 font-light tracking-wide ml-0 mb-2 leading-relaxed">
+              {pizzaDesc.get(pizzaName)}
+            </p>
+          )}
         </div>
       ))}
     </>
@@ -174,13 +205,22 @@ function MomoSection({ value }: { value: Record<string, MenuItem[]> }) {
   return (
     <>
       {Object.entries(value).map(([protein, items]) => {
-        const varieties = items.map((item) => ({
+        // Sort items by sort_order
+        const sortedItems = [...items].sort((a, b) => {
+          const aOrder = a.sort_order ?? Infinity;
+          const bOrder = b.sort_order ?? Infinity;
+          return aOrder - bOrder;
+        });
+
+        const varieties = sortedItems.map((item) => ({
           label: item.name
             .replace(new RegExp(protein, 'i'), '')
             .replace(/momo/i, '')
             .trim(),
           price: item.price,
+          description: item.description,
         }));
+        const firstItemDesc = sortedItems[0]?.description;
 
         return (
           <div key={protein}>
@@ -196,21 +236,21 @@ function MomoSection({ value }: { value: Record<string, MenuItem[]> }) {
                          hover:pl-2.5"
             >
               <span
-                className="absolute left-[-12px] top-1/2 -translate-y-1/2 w-[3px] h-0
+                className="absolute -left-3 top-1/2 -translate-y-1/2 w-0.75 h-0
                            bg-ember rounded-sm transition-all duration-250
                            group-hover:h-[60%]"
               />
               <span className="text-xl font-light tracking-[0.04em] text-cream max-w-[75%] leading-relaxed">
                 {protein} Momo
               </span>
-              <span className="flex-1 border-b border-dotted border-gold/20 mx-3 relative top-[-4px]" />
+              <span className="flex-1 border-b border-dotted border-gold/20 mx-3 relative -top-1" />
               <div className="flex flex-col items-end gap-0.5 shrink-0">
                 <div className="flex gap-4.5 justify-end">
                   {varieties.map((v, i) => (
                     <span
                       key={i}
                       className="font-body text-[0.68rem] font-light tracking-[0.08em]
-                                 uppercase text-[#a08060] min-w-[52px] text-center"
+                                 uppercase text-[#a08060] min-w-13 text-center"
                     >
                       {v.label}
                     </span>
@@ -221,9 +261,9 @@ function MomoSection({ value }: { value: Record<string, MenuItem[]> }) {
                     <span
                       key={i}
                       className="font-display text-xl font-normal text-gold whitespace-nowrap
-                                 tracking-[0.03em] min-w-[52px] text-center"
+                                 tracking-[0.03em] min-w-13 text-center"
                     >
-                      <span className="text-sm tracking-[0.1em] opacity-70 mr-0.5 font-body font-extralight">
+                      <span className="text-sm tracking-widest opacity-70 mr-0.5 font-body font-extralight">
                         Rs.
                       </span>
                       {v.price}
@@ -232,6 +272,11 @@ function MomoSection({ value }: { value: Record<string, MenuItem[]> }) {
                 </div>
               </div>
             </div>
+            {firstItemDesc && (
+              <p className="text-sm text-muted/70 font-light tracking-wide ml-0 mb-2 leading-relaxed">
+                {firstItemDesc}
+              </p>
+            )}
           </div>
         );
       })}
@@ -245,8 +290,15 @@ const HIGHLIGHT = ['pizza', 'hukka', 'wings', 'sekuwa'];
 function ComboSection({ value }: { value: Record<string, MenuItem[]> }) {
   return (
     <div className="grid grid-cols-2 gap-3.5 mt-2 max-[560px]:grid-cols-1">
-      {Object.entries(value).flatMap(([sub, items]) =>
-        items.map((item, i) => {
+      {Object.entries(value).flatMap(([sub, items]) => {
+        // Sort items by sort_order
+        const sortedItems = [...items].sort((a, b) => {
+          const aOrder = a.sort_order ?? Infinity;
+          const bOrder = b.sort_order ?? Infinity;
+          return aOrder - bOrder;
+        });
+
+        return sortedItems.map((item, i) => {
           const servesMatch = item.name.match(/for\s+(\d+)/i);
           const servesText = servesMatch ? `For ${servesMatch[1]}` : '';
           const parts = item.name
@@ -268,7 +320,7 @@ function ComboSection({ value }: { value: Record<string, MenuItem[]> }) {
               ].join(' ')}
             >
               {/* Top gradient accent (shows on hover) */}
-              <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-ember to-gold
+              <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-ember to-gold
                               opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               <h3 className="text-xl tracking-[0.38em] uppercase text-ember mb-4">
@@ -280,7 +332,7 @@ function ComboSection({ value }: { value: Record<string, MenuItem[]> }) {
                   <span
                     key={j}
                     className={[
-                      'text-[15px] font-light tracking-[0.03em] bg-white/[0.04]',
+                      'text-[15px] font-light tracking-[0.03em] bg-white/4',
                       'border rounded-[1px] px-2.5 py-1 leading-relaxed whitespace-nowrap',
                       HIGHLIGHT.some((k) => part.toLowerCase().includes(k))
                         ? 'text-gold bg-gold/[0.07] border-gold/20'
@@ -292,12 +344,18 @@ function ComboSection({ value }: { value: Record<string, MenuItem[]> }) {
                 ))}
               </div>
 
+              {item.description && (
+                <p className="text-xs text-muted/60 font-light tracking-wide mt-3 mb-2 leading-relaxed">
+                  {item.description}
+                </p>
+              )}
+
               <div className="flex items-center justify-between mt-4.5 pt-3.5 border-t border-line">
                 <span className="text-[10px] tracking-[0.18em] uppercase text-muted">
                   {servesText}
                 </span>
                 <div className="font-display text-2xl font-normal text-gold leading-none">
-                  <span className="text-[11px] font-body font-extralight tracking-[0.1em] mr-0.5 opacity-65">
+                  <span className="text-[11px] font-body font-extralight tracking-widest mr-0.5 opacity-65">
                     Rs.
                   </span>
                   {item.price}
@@ -305,8 +363,8 @@ function ComboSection({ value }: { value: Record<string, MenuItem[]> }) {
               </div>
             </div>
           );
-        }),
-      )}
+        });
+      })}
     </div>
   );
 }
