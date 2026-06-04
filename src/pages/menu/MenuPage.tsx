@@ -13,7 +13,7 @@ export default function MenuPage() {
 
       {/* Hero divider */}
       <div className="flex justify-center h-50">
-        <div className="w-px h-15 bg-linear-to-b from-transparent via-gold to-transparent animate-fade-up" />
+        
       </div>
 
       {/* Menu content */}
