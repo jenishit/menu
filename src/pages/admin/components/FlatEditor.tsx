@@ -7,6 +7,7 @@ interface FlatEditorProps {
   onEditItem: (idx: number) => void;
   onDeleteItem: (idx: number, name: string) => void;
   onReorderItem: (fromIdx: number, toIdx: number) => void;
+  onToggleHide: (idx: number) => void;
 }
 
 export default function FlatEditor({
@@ -15,6 +16,7 @@ export default function FlatEditor({
   onEditItem,
   onDeleteItem,
   onReorderItem,
+  onToggleHide,
 }: FlatEditorProps) {
   return (
     <>
@@ -30,7 +32,7 @@ export default function FlatEditor({
           + Add Item
         </button>
       </div>
-      <ItemRows items={items} onEdit={onEditItem} onDelete={onDeleteItem} onReorder={onReorderItem} />
+      <ItemRows items={items} onEdit={onEditItem} onDelete={onDeleteItem} onReorder={onReorderItem} onToggleHide={onToggleHide} />
     </>
   );
 }

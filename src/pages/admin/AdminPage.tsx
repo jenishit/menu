@@ -5,7 +5,7 @@ import { signOut } from 'firebase/auth';
 import { db, auth } from '../../firebase';
 import { useAuth } from '../../hooks/useAuth';
 import { isFlatCategory } from '../../types';
-import type { MenuData, MenuItem } from '../../types';
+import type { MenuData, MenuItem, MenuMetadata } from '../../types';
 import { getDefaultMenu } from '../../data/defaultMenu';
 import FlatEditor from './components/FlatEditor';
 import NestedEditor from './components/NestedEditor';
@@ -30,28 +30,44 @@ function errorMessage(err: unknown): string {
   return 'Save failed';
 }
 
+/** Build initial categoryMeta from existing category keys (sorted by their current order) */
+function buildInitialMeta(keys: string[], existing: MenuMetadata): MenuMetadata {
+  const meta: MenuMetadata = { ...existing };
+  keys.forEach((key, idx) => {
+    if (!meta[key]) meta[key] = { sort_order: idx };
+    else if (meta[key].sort_order === undefined) meta[key] = { ...meta[key], sort_order: idx };
+  });
+  return meta;
+}
+
 // ── Firestore helpers ───────────────────────────────────────────────────────
-async function fetchMenu(): Promise<MenuData> {
+async function fetchMenu(): Promise<{ menu: MenuData; meta: MenuMetadata }> {
   const snap = await getDoc(doc(db, 'menu', 'main'));
   if (snap.exists()) {
     const payload = snap.data();
     const docMenu = looksLikeMenuData(payload.data) ? payload.data : payload;
-    if (looksLikeMenuData(docMenu)) return docMenu;
+    const docMeta: MenuMetadata = (payload.categoryMeta as MenuMetadata) ?? {};
+    if (looksLikeMenuData(docMenu)) {
+      return { menu: docMenu, meta: buildInitialMeta(Object.keys(docMenu), docMeta) };
+    }
   }
 
   // Seed with default menu data on first run
   const defaultMenu = getDefaultMenu();
+  const defaultMeta: MenuMetadata = {};
+  Object.keys(defaultMenu).forEach((key, idx) => {
+    defaultMeta[key] = { sort_order: idx };
+  });
   try {
-    await setDoc(doc(db, 'menu', 'main'), { data: defaultMenu });
-    return defaultMenu;
+    await setDoc(doc(db, 'menu', 'main'), { data: defaultMenu, categoryMeta: defaultMeta });
   } catch (e) {
     console.error('Failed to seed default menu:', e);
-    return defaultMenu;
   }
+  return { menu: defaultMenu, meta: defaultMeta };
 }
 
-async function saveMenu(data: MenuData): Promise<void> {
-  await setDoc(doc(db, 'menu', 'main'), { data });
+async function saveMenu(data: MenuData, meta: MenuMetadata): Promise<void> {
+  await setDoc(doc(db, 'menu', 'main'), { data, categoryMeta: meta });
 }
 
 // ── Root component ──────────────────────────────────────────────────────────
@@ -59,20 +75,21 @@ export default function AdminPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [menu, setMenu] = useState<MenuData | null>(null);
+  const [categoryMeta, setCategoryMeta] = useState<MenuMetadata>({});
   const [loadError, setLoadError] = useState<string | null>(null);
   const [selectedCat, setSelectedCat] = useState<string | null>(null);
   const [selectedSub, setSelectedSub] = useState<string | null>(null);
   const [modal, setModal] = useState<ReactNode>(null);
   const [toast, setToast] = useState<ToastState>(null);
   const [draggedCatIdx, setDraggedCatIdx] = useState<number | null>(null);
-  const [draggedItemIdx, setDraggedItemIdx] = useState<number | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout>>();
 
   // ── Load menu ─────────────────────────────────────────────────────────────
   useEffect(() => {
     fetchMenu()
-      .then((data) => {
+      .then(({ menu: data, meta }) => {
         setMenu(data);
+        setCategoryMeta(meta);
         setLoadError(null);
         const first = Object.keys(data)[0];
         if (first) setSelectedCat(first);
@@ -93,10 +110,11 @@ export default function AdminPage() {
 
   // ── Persist helper ────────────────────────────────────────────────────────
   const persist = useCallback(
-    async (next: MenuData) => {
+    async (next: MenuData, nextMeta: MenuMetadata) => {
       try {
-        await saveMenu(next);
+        await saveMenu(next, nextMeta);
         setMenu(next);
+        setCategoryMeta(nextMeta);
         showToast('Saved ✓');
       } catch (err) {
         showToast(errorMessage(err), true);
@@ -150,47 +168,45 @@ export default function AdminPage() {
 
   function handleCategoryDrop(targetIdx: number) {
     if (draggedCatIdx === null || draggedCatIdx === targetIdx || !menu) return;
-    
+
     const cats = Object.keys(menu);
     const newCats = [...cats];
     const [draggedCat] = newCats.splice(draggedCatIdx, 1);
     newCats.splice(targetIdx, 0, draggedCat);
-    
+
     // Rebuild menu in new order
     const next: MenuData = {};
-    newCats.forEach((cat, idx) => {
+    newCats.forEach((cat) => {
       next[cat] = menu[cat];
-      // Update category sort_order in all items
-      const catVal = menu[cat];
-      if (isFlatCategory(catVal)) {
-        next[cat] = catVal.map((item) => ({
-          ...item,
-          sort_order: (item.sort_order ?? 0) + (targetIdx - draggedCatIdx) * 1000,
-        }));
-      }
     });
-    
-    persist(next);
+
+    // Update sort_order in categoryMeta to reflect new positions
+    const nextMeta = { ...categoryMeta };
+    newCats.forEach((cat, idx) => {
+      nextMeta[cat] = { ...nextMeta[cat], sort_order: idx };
+    });
+
+    persist(next, nextMeta);
     setDraggedCatIdx(null);
     if (selectedCat === cats[draggedCatIdx]) {
       setSelectedCat(draggedCat);
     }
   }
 
+  // ── Toggle category hidden ────────────────────────────────────────────────
+  function toggleCategoryHide(cat: string) {
+    if (!menu) return;
+    const nextMeta = { ...categoryMeta };
+    nextMeta[cat] = { ...nextMeta[cat], hidden: !nextMeta[cat]?.hidden };
+    persist(menu, nextMeta);
+  }
+
   // ── Item drag & drop ───────────────────────────────────────────────────────
-  function handleItemDragStart(idx: number) {
-    setDraggedItemIdx(idx);
-  }
-
-  function handleItemDragOver(e: React.DragEvent) {
-    e.preventDefault();
-  }
-
-  function handleItemDrop(targetIdx: number) {
-    if (draggedItemIdx === null || draggedItemIdx === targetIdx) return;
+  function handleItemDrop(targetIdx: number, fromIdx: number) {
+    if (fromIdx === targetIdx) return;
 
     const items = [...getItems()];
-    const [draggedItem] = items.splice(draggedItemIdx, 1);
+    const [draggedItem] = items.splice(fromIdx, 1);
     items.splice(targetIdx, 0, draggedItem);
 
     // Update sort_order for all items based on new position
@@ -200,8 +216,15 @@ export default function AdminPage() {
     }));
 
     const next = updateItems(updatedItems);
-    if (next) persist(next);
-    setDraggedItemIdx(null);
+    if (next) persist(next, categoryMeta);
+  }
+
+  // ── Toggle item hidden ────────────────────────────────────────────────────
+  function toggleItemHide(idx: number) {
+    const items = [...getItems()];
+    items[idx] = { ...items[idx], hidden: !items[idx].hidden };
+    const next = updateItems(items);
+    if (next) persist(next, categoryMeta);
   }
 
   // ── Add / Edit item ───────────────────────────────────────────────────────
@@ -219,7 +242,7 @@ export default function AdminPage() {
           if (editIdx !== null) items[editIdx] = item;
           else items.push(item);
           const next = updateItems(items);
-          if (next) await persist(next);
+          if (next) await persist(next, categoryMeta);
           closeModal();
         }}
       />,
@@ -243,7 +266,7 @@ export default function AdminPage() {
           const items = [...getItems()];
           items.splice(idx, 1);
           const next = updateItems(items);
-          if (next) await persist(next);
+          if (next) await persist(next, categoryMeta);
           closeModal();
         }}
       />,
@@ -255,11 +278,11 @@ export default function AdminPage() {
     setModal(
       <AddCategoryModal
         onClose={closeModal}
-        onSave={async (name, type, _sortOrder) => {
+        onSave={async (name, type) => {
           if (!menu) return;
           const next = { ...menu, [name]: type === 'flat' ? [] : {} };
-          // TODO: sortOrder can be stored in a separate metadata collection in Firestore if needed
-          await persist(next);
+          const nextMeta = { ...categoryMeta, [name]: { sort_order: Object.keys(menu).length } };
+          await persist(next, nextMeta);
           selectCat(name);
           closeModal();
         }}
@@ -288,7 +311,9 @@ export default function AdminPage() {
           if (!menu) return;
           const next = { ...menu };
           delete next[name];
-          await persist(next);
+          const nextMeta = { ...categoryMeta };
+          delete nextMeta[name];
+          await persist(next, nextMeta);
           const remaining = Object.keys(next);
           setSelectedCat(remaining[0] ?? null);
           setSelectedSub(null);
@@ -315,8 +340,13 @@ export default function AdminPage() {
         onClose={closeModal}
         onConfirm={async () => {
           try {
-            await saveMenu(defaultMenu);
+            const defaultMeta: MenuMetadata = {};
+            Object.keys(defaultMenu).forEach((key, idx) => {
+              defaultMeta[key] = { sort_order: idx };
+            });
+            await saveMenu(defaultMenu, defaultMeta);
             setMenu(defaultMenu);
+            setCategoryMeta(defaultMeta);
             const first = Object.keys(defaultMenu)[0] ?? null;
             setSelectedCat(first);
             setSelectedSub(null);
@@ -344,7 +374,7 @@ export default function AdminPage() {
         onSave={async (name) => {
           const next = { ...menu };
           next[selectedCat] = { ...(val as Record<string, MenuItem[]>), [name]: [] };
-          await persist(next);
+          await persist(next, categoryMeta);
           setSelectedSub(name);
           closeModal();
         }}
@@ -395,6 +425,13 @@ export default function AdminPage() {
     return subs[0] ?? null;
   })();
   if (isNested && activeSub !== selectedSub) setSelectedSub(activeSub);
+
+  // Sorted category list for sidebar (by sort_order in meta)
+  const sortedCats = Object.keys(menu).slice().sort((a, b) => {
+    const aOrder = categoryMeta[a]?.sort_order ?? Infinity;
+    const bOrder = categoryMeta[b]?.sort_order ?? Infinity;
+    return aOrder - bOrder;
+  });
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
@@ -458,27 +495,57 @@ export default function AdminPage() {
             </button>
           </div>
           <ul className="flex-1 overflow-y-auto py-2 space-y-0.5 px-2">
-            {Object.keys(menu).map((cat, idx) => (
-              <li
-                key={cat}
-                draggable
-                onDragStart={() => handleCategoryDragStart(idx)}
-                onDragOver={handleCategoryDragOver}
-                onDrop={() => handleCategoryDrop(idx)}
-                onDragEnd={() => setDraggedCatIdx(null)}
-                onClick={() => selectCat(cat)}
-                className={[
-                  'cursor-move px-3 py-2.5 rounded-sm text-sm font-light tracking-wide',
-                  'border-l-2 transition-all duration-200 select-none',
-                  draggedCatIdx === idx ? 'opacity-50 bg-gold/10' : '',
-                  cat === selectedCat
-                    ? 'border-ember bg-ember/5 text-ember'
-                    : 'border-transparent text-cream/70 hover:border-gold/30 hover:bg-white/3 hover:text-cream',
-                ].join(' ')}
-              >
-                {cat}
-              </li>
-            ))}
+            {sortedCats.map((cat, idx) => {
+              const isHidden = categoryMeta[cat]?.hidden ?? false;
+              const isActive = cat === selectedCat;
+              return (
+                <li
+                  key={cat}
+                  draggable
+                  onDragStart={() => handleCategoryDragStart(idx)}
+                  onDragOver={handleCategoryDragOver}
+                  onDrop={() => handleCategoryDrop(idx)}
+                  onDragEnd={() => setDraggedCatIdx(null)}
+                  className={[
+                    'group relative flex items-center gap-1 cursor-move px-3 py-2.5 rounded-sm',
+                    'border-l-2 transition-all duration-200 select-none',
+                    draggedCatIdx === idx ? 'opacity-50 bg-gold/10' : '',
+                    isHidden ? 'opacity-50' : '',
+                    isActive
+                      ? 'border-ember bg-ember/5 text-ember'
+                      : 'border-transparent text-cream/70 hover:border-gold/30 hover:bg-white/3 hover:text-cream',
+                  ].join(' ')}
+                >
+                  {/* Category name — clickable area */}
+                  <span
+                    className="flex-1 text-sm font-light tracking-wide leading-snug truncate"
+                    onClick={() => selectCat(cat)}
+                  >
+                    {cat}
+                    {isHidden && (
+                      <span className="ml-1.5 text-[7px] tracking-[0.15em] uppercase text-amber-500/70 border border-amber-500/30 px-1 py-0.5 rounded-sm align-middle">
+                        Hidden
+                      </span>
+                    )}
+                  </span>
+
+                  {/* Eye toggle — appears on hover */}
+                  <button
+                    title={isHidden ? 'Show category on menu' : 'Hide category from menu'}
+                    onClick={(e) => { e.stopPropagation(); toggleCategoryHide(cat); }}
+                    className={[
+                      'shrink-0 text-[10px] p-1 rounded transition-all duration-150',
+                      'opacity-0 group-hover:opacity-100',
+                      isHidden
+                        ? 'text-amber-400 hover:text-amber-300'
+                        : 'text-muted/50 hover:text-amber-400',
+                    ].join(' ')}
+                  >
+                    {isHidden ? '👁' : '🚫'}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </aside>
 
@@ -489,18 +556,38 @@ export default function AdminPage() {
             className="shrink-0 flex items-center justify-between px-8 py-5
                        border-b border-gold/10 bg-surface/20"
           >
-            <h2 className="font-display text-3xl font-light text-cream tracking-wide">
-              {selectedCat ?? 'Select a category'}
-            </h2>
+            <div className="flex items-center gap-3">
+              <h2 className="font-display text-3xl font-light text-cream tracking-wide">
+                {selectedCat ?? 'Select a category'}
+              </h2>
+              {selectedCat && categoryMeta[selectedCat]?.hidden && (
+                <span className="text-[9px] tracking-[0.2em] uppercase text-amber-500/80 border border-amber-500/30 px-2 py-1">
+                  Hidden from menu
+                </span>
+              )}
+            </div>
             {selectedCat && (
-              <button
-                onClick={openDeleteCategory}
-                className="bg-red-900/30 border border-red-500/30 text-red-400
-                           px-5 py-2 text-[9px] tracking-[0.28em] uppercase
-                           hover:bg-red-900/50 transition-colors"
-              >
-                Delete Category
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => selectedCat && toggleCategoryHide(selectedCat)}
+                  className={[
+                    'px-4 py-2 text-[9px] tracking-[0.24em] uppercase border transition-colors',
+                    categoryMeta[selectedCat]?.hidden
+                      ? 'border-amber-500/40 text-amber-400 hover:bg-amber-500/10'
+                      : 'border-gold/20 text-muted/70 hover:text-amber-400 hover:border-amber-500/30',
+                  ].join(' ')}
+                >
+                  {categoryMeta[selectedCat]?.hidden ? '👁 Unhide Category' : '🚫 Hide Category'}
+                </button>
+                <button
+                  onClick={openDeleteCategory}
+                  className="bg-red-900/30 border border-red-500/30 text-red-400
+                             px-5 py-2 text-[9px] tracking-[0.28em] uppercase
+                             hover:bg-red-900/50 transition-colors"
+                >
+                  Delete Category
+                </button>
+              </div>
             )}
           </div>
 
@@ -519,7 +606,8 @@ export default function AdminPage() {
                 onAddItem={() => openItemModal(null)}
                 onEditItem={openItemModal}
                 onDeleteItem={openDeleteItem}
-                onReorderItem={handleItemDrop}
+                onReorderItem={(from, to) => handleItemDrop(to, from)}
+                onToggleHide={toggleItemHide}
               />
             ) : (
               <FlatEditor
@@ -527,7 +615,8 @@ export default function AdminPage() {
                 onAddItem={() => openItemModal(null)}
                 onEditItem={openItemModal}
                 onDeleteItem={openDeleteItem}
-                onReorderItem={handleItemDrop}
+                onReorderItem={(from, to) => handleItemDrop(to, from)}
+                onToggleHide={toggleItemHide}
               />
             )}
           </main>

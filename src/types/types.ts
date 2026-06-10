@@ -5,6 +5,7 @@ export interface MenuItem {
   price: number;
   description?: string;
   sort_order?: number;
+  hidden?: boolean;
 }
 
 /** A simple list of items (Tea, Coffee, Snacks …) */
@@ -16,6 +17,14 @@ export type NestedCategory = Record<string, MenuItem[]>;
 export type CategoryValue = FlatCategory | NestedCategory;
 
 export type MenuData = Record<string, CategoryValue>;
+
+// ── Category metadata (sort order + visibility per category) ───────────────
+export interface CategoryMeta {
+  sort_order?: number;
+  hidden?: boolean;
+}
+
+export type MenuMetadata = Record<string, CategoryMeta>;
 
 // ── Type guard ─────────────────────────────────────────────────────────────
 export function isFlatCategory(val: CategoryValue): val is FlatCategory {
