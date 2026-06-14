@@ -13,6 +13,7 @@ import ItemModal from './components/ItemModal';
 import ConfirmModal from './components/ConfirmModal';
 import AddCategoryModal from './components/AddCategoryModal';
 import AddSubCatModal from './components/AddSubCatModal';
+import RenameCategoryModal from './components/RenameCategoryModal';
 
 // ── Types & helpers ─────────────────────────────────────────────────────────
 type ToastState = { message: string; error?: boolean } | null;
@@ -41,6 +42,36 @@ function buildInitialMeta(keys: string[], existing: MenuMetadata): MenuMetadata 
 }
 
 // ── Firestore helpers ───────────────────────────────────────────────────────
+
+/** Sort items within a category by their sort_order field.
+ * Items without sort_order keep their original array position (stable fallback). */
+function sortItems(val: import('../../types').CategoryValue): import('../../types').CategoryValue {
+  const stableSort = (arr: MenuItem[]) =>
+    arr
+      .map((item, i) => ({ item, i }))
+      .sort((a, b) => {
+        const aOrd = a.item.sort_order ?? null;
+        const bOrd = b.item.sort_order ?? null;
+        // Both have sort_order: numeric comparison
+        if (aOrd !== null && bOrd !== null) return aOrd - bOrd;
+        // Only one has sort_order: ordered items come first
+        if (aOrd !== null) return -1;
+        if (bOrd !== null) return 1;
+        // Neither has sort_order: preserve original position
+        return a.i - b.i;
+      })
+      .map(({ item }) => item);
+
+  if (isFlatCategory(val)) {
+    return stableSort(val);
+  }
+  const result: Record<string, MenuItem[]> = {};
+  for (const [sub, items] of Object.entries(val as Record<string, MenuItem[]>)) {
+    result[sub] = stableSort(items);
+  }
+  return result as import('../../types').CategoryValue;
+}
+
 async function fetchMenu(): Promise<{ menu: MenuData; meta: MenuMetadata }> {
   const snap = await getDoc(doc(db, 'menu', 'main'));
   if (snap.exists()) {
@@ -48,7 +79,13 @@ async function fetchMenu(): Promise<{ menu: MenuData; meta: MenuMetadata }> {
     const docMenu = looksLikeMenuData(payload.data) ? payload.data : payload;
     const docMeta: MenuMetadata = (payload.categoryMeta as MenuMetadata) ?? {};
     if (looksLikeMenuData(docMenu)) {
-      return { menu: docMenu, meta: buildInitialMeta(Object.keys(docMenu), docMeta) };
+      const meta = buildInitialMeta(Object.keys(docMenu), docMeta);
+      // Sort items within each category by sort_order
+      const sortedMenu: MenuData = {};
+      for (const key of Object.keys(docMenu)) {
+        sortedMenu[key] = sortItems(docMenu[key]) as MenuData[string];
+      }
+      return { menu: sortedMenu, meta };
     }
   }
 
@@ -158,6 +195,7 @@ export default function AdminPage() {
   }
 
   // ── Category drag & drop ───────────────────────────────────────────────────
+  // NOTE: drag indices refer to positions in `sortedCats`, NOT Object.keys(menu)
   function handleCategoryDragStart(idx: number) {
     setDraggedCatIdx(idx);
   }
@@ -166,15 +204,15 @@ export default function AdminPage() {
     e.preventDefault();
   }
 
-  function handleCategoryDrop(targetIdx: number) {
+  function handleCategoryDrop(targetIdx: number, sortedCatsSnapshot: string[]) {
     if (draggedCatIdx === null || draggedCatIdx === targetIdx || !menu) return;
 
-    const cats = Object.keys(menu);
-    const newCats = [...cats];
+    // Work with sortedCats order (matches what's rendered in the sidebar)
+    const newCats = [...sortedCatsSnapshot];
     const [draggedCat] = newCats.splice(draggedCatIdx, 1);
     newCats.splice(targetIdx, 0, draggedCat);
 
-    // Rebuild menu in new order
+    // Rebuild menu object in new order
     const next: MenuData = {};
     newCats.forEach((cat) => {
       next[cat] = menu[cat];
@@ -186,11 +224,8 @@ export default function AdminPage() {
       nextMeta[cat] = { ...nextMeta[cat], sort_order: idx };
     });
 
-    persist(next, nextMeta);
     setDraggedCatIdx(null);
-    if (selectedCat === cats[draggedCatIdx]) {
-      setSelectedCat(draggedCat);
-    }
+    persist(next, nextMeta);
   }
 
   // ── Toggle category hidden ────────────────────────────────────────────────
@@ -291,6 +326,37 @@ export default function AdminPage() {
     );
   }
 
+  // ── Rename category ───────────────────────────────────────────────────────
+  function openRenameCategory() {
+    if (!selectedCat || !menu) return;
+    const oldName = selectedCat;
+    setModal(
+      <RenameCategoryModal
+        currentName={oldName}
+        existingNames={Object.keys(menu).filter((k) => k !== oldName)}
+        onClose={closeModal}
+        onSave={async (newName: string) => {
+          if (!menu) return;
+          // Rebuild menu with renamed key, preserving order
+          const next: MenuData = {};
+          const nextMeta = { ...categoryMeta };
+          for (const key of Object.keys(menu)) {
+            if (key === oldName) {
+              next[newName] = menu[oldName];
+              nextMeta[newName] = { ...nextMeta[oldName] };
+              delete nextMeta[oldName];
+            } else {
+              next[key] = menu[key];
+            }
+          }
+          await persist(next, nextMeta);
+          setSelectedCat(newName);
+          closeModal();
+        }}
+      />,
+    );
+  }
+
   // ── Delete category ───────────────────────────────────────────────────────
   function openDeleteCategory() {
     if (!selectedCat) return;
@@ -311,11 +377,14 @@ export default function AdminPage() {
           if (!menu) return;
           const next = { ...menu };
           delete next[name];
+          // Re-number sort_order for remaining cats in one shot
           const nextMeta = { ...categoryMeta };
           delete nextMeta[name];
+          Object.keys(next).forEach((k, i) => {
+            nextMeta[k] = { ...nextMeta[k], sort_order: i };
+          });
           await persist(next, nextMeta);
-          const remaining = Object.keys(next);
-          setSelectedCat(remaining[0] ?? null);
+          setSelectedCat(Object.keys(next)[0] ?? null);
           setSelectedSub(null);
           closeModal();
         }}
@@ -427,6 +496,7 @@ export default function AdminPage() {
   if (isNested && activeSub !== selectedSub) setSelectedSub(activeSub);
 
   // Sorted category list for sidebar (by sort_order in meta)
+  // This is the AUTHORITATIVE order used for drag-and-drop indices
   const sortedCats = Object.keys(menu).slice().sort((a, b) => {
     const aOrder = categoryMeta[a]?.sort_order ?? Infinity;
     const bOrder = categoryMeta[b]?.sort_order ?? Infinity;
@@ -504,7 +574,7 @@ export default function AdminPage() {
                   draggable
                   onDragStart={() => handleCategoryDragStart(idx)}
                   onDragOver={handleCategoryDragOver}
-                  onDrop={() => handleCategoryDrop(idx)}
+                  onDrop={() => handleCategoryDrop(idx, sortedCats)}
                   onDragEnd={() => setDraggedCatIdx(null)}
                   className={[
                     'group relative flex items-center gap-1 cursor-move px-3 py-2.5 rounded-sm',
@@ -568,6 +638,14 @@ export default function AdminPage() {
             </div>
             {selectedCat && (
               <div className="flex gap-3">
+                <button
+                  onClick={openRenameCategory}
+                  className="border border-gold/20 text-muted/70 px-4 py-2 text-[9px]
+                             tracking-[0.24em] uppercase hover:text-cream hover:border-gold/40
+                             transition-colors"
+                >
+                  ✏️ Rename
+                </button>
                 <button
                   onClick={() => selectedCat && toggleCategoryHide(selectedCat)}
                   className={[
